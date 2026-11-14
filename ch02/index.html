@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapitre 2 · Les neurones et le message électrique — Communication neuronale</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render">
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="../lib/lang-fr.js"></script>
+<script src="../lib/vocab.js"></script>
+<script src="audio/fr/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = {
+  number: 2,
+  title: 'Les neurones : des cellules spécialisées dans la communication électrique',
+  minutes: 6,
+  language: 'fr',
+  next: '../ch03/',
+};
+
+const BEATS = [
+  ['intro', 'Introduction', (m, D) => {
+    const g = G(scene, { o: 0, y: 18 });
+    T(g, 'SVT · Cycle 4 (4e) · Partie 1 · Chapitre 2', { x: 800, y: 188, size: 26, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Les neurones : cellules du message', { x: 800, y: 288, size: 68, weight: 700, fill: COL.chalk, anchor: 'middle' });
+    T(g, 'Substance grise, fibres nerveuses et potentiel d’action', { x: 800, y: 364, size: 40, weight: 600, fill: C_CENTRE, anchor: 'middle' });
+
+    neuNeuron(g, 580, 560, { scale: 1.05, color: C_CENTRE, t0: .15, pulseAt: .65, pulseColor: C_NT });
+    neuOscillo(g, 995, 480, 340, 156, { t0: .3, mode: 'normal', label: 'Potentiel d’action (électrique)', color: C_NT });
+
+    tw(g, { o: 1, y: 0 }, .12, .75, out);
+    const sub = neuText(scene, 'À quoi ressemblent les cellules nerveuses et quelle est la nature du message qui y circule ?', 800, 742, m('sub'), { size: 27, fill: COL.dim, anchor: 'middle' });
+    tw(g, { o: 0, y: -18 }, D - .75, .65);
+    hide(sub, D - .75, .65);
+  }],
+
+  ['substances', 'Le cerveau à l’échelle organe', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Organisation du cerveau humain : substance grise et blanche', 64, .05, 'Documents 1 et 2 du cours : vue externe des hémisphères et coupe transversale');
+
+    neuDoc(p, '../img/doc_cerveau_coupes.webp', 230, 146, 1140, 472, { color: C_CENTRE, pad: 10, t0: .1 });
+    neuSpotlight(p, 815, 222, 535, 385, C_NT, m('cortex'), .4, { fillOpacity: .06 });
+    neuSpotlight(p, 865, 315, 415, 175, C_MOT, m('blanche'), .4, { fillOpacity: .07 });
+
+    neuCard(p, 130, 642, 635, 140, { title: '(1) Substance grise · Cortex en périphérie', color: C_NT, t0: m('cortex') });
+    neuText(p, 'Couche externe sombre des deux hémisphères cérébraux.', 448, 725, m('cortex') + .2, { size: 20, anchor: 'middle' });
+    neuText(p, 'Regroupe les corps cellulaires des neurones.', 448, 758, m('cortex') + .35, { size: 19, fill: COL.dim, anchor: 'middle' });
+
+    neuCard(p, 835, 642, 635, 140, { title: '(2) Substance blanche · Au centre', color: C_MOT, t0: m('blanche') });
+    neuText(p, 'Région interne plus claire reliant les aires et la moelle.', 1152, 725, m('blanche') + .2, { size: 20, anchor: 'middle' });
+    neuText(p, 'Contient les prolongements longs des neurones.', 1152, 758, m('blanche') + .35, { size: 19, fill: COL.dim, anchor: 'middle' });
+  }],
+
+  ['coupes', 'Microscopie des tissus nerveux', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Observation microscopique : cerveau, moelle épinière et nerfs', 64, .05, 'Document 1 : comparaison des structures cellulaires à différentes échelles');
+
+    neuCard(p, 60, 146, 680, 620, { title: 'Document 1 · Coupes histologiques', color: C_CENTRE, t0: .08 });
+    neuDoc(p, '../img/doc_cellules_nerveuses.webp', 88, 206, 624, 540, { color: C_CENTRE, pad: 8, t0: .14 });
+
+    neuSpotlight(p, 425, 225, 275, 290, C_NT, m('corps'), .4, { fillOpacity: .08 });
+    neuSpotlight(p, 425, 535, 275, 205, C_MOT, m('fibres'), .4, { fillOpacity: .08 });
+
+    neuCard(p, 780, 162, 760, 275, { title: 'Cerveau et moelle épinière (échelle : 0,2 mm)', color: C_NT, t0: m('corps') });
+    neuText(p, 'On observe des cellules de forme étoilée dans la substance grise :', 810, 258, m('corps') + .15, { size: 22 });
+    neuText(p, 'ce sont les corps cellulaires des neurones et leurs ramifications.', 810, 296, m('corps') + .3, { size: 22, fill: C_NT });
+    neuPill(p, 1160, 382, 'Corps cellulaires étoilés · 0,2 mm', C_NT, m('corps') + .45, { w: 470, size: 20 });
+
+    neuCard(p, 780, 472, 760, 275, { title: 'Nerfs périphériques (échelle : 0,06 mm)', color: C_MOT, t0: m('fibres') });
+    neuText(p, 'Aucun corps cellulaire : uniquement des faisceaux de fibres parallèles.', 810, 568, m('fibres') + .15, { size: 21 });
+    neuText(p, 'Ce sont les prolongements (axones) qui relient les organes.', 810, 606, m('fibres') + .3, { size: 21, fill: C_MOT });
+    neuPill(p, 1160, 692, 'Faisceaux d’axones · 0,06 mm', C_MOT, m('fibres') + .45, { w: 470, size: 20 });
+  }],
+
+  ['q1', 'Vérifions l’organisation cellulaire', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Où se trouvent les corps cellulaires étoilés des neurones ?', 66, .05);
+    neuSchemaNode(p, 430, 240, 340, 100, ['Substance grise', 'Cerveau et moelle'], { color: C_NT, sub: '0,2 mm', t0: .1 });
+    neuArrow(p, 625, 240, 965, 240, .25, { color: C_MOT, sw: 5 });
+    neuSchemaNode(p, 1160, 240, 340, 100, ['Nerfs', 'Faisceaux de fibres'], { color: C_MOT, sub: '0,06 mm', t0: .15 });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch2-q1',
+      prompt: ['Quelle différence sépare la substance grise (cerveau / moelle) d’un nerf observé au microscope ?'],
+      build: choice([
+        'La substance grise contient les corps cellulaires étoilés ; le nerf ne contient que des axones',
+        'Les nerfs contiennent uniquement les noyaux sans aucun cytoplasme',
+        'La substance grise ne possède aucune cellule nerveuse',
+      ], 0, 'Exact ! Les corps cellulaires à noyau siègent dans la substance grise ; les nerfs regroupent leurs longs axones.', [
+        null,
+        'Non, le noyau de chaque neurone est situé dans son corps cellulaire, dans les centres nerveux.',
+        'Non, au contraire : la substance grise renferme une forte densité de corps cellulaires étoilés.',
+      ]),
+    }], done),
+  }],
+
+  ['neurone', 'Anatomie du neurone', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Le neurone : une cellule spécialisée dans la communication', 64, .05, 'Schéma corrigé du cours et circulation orientée du message');
+
+    neuCard(p, 60, 146, 860, 430, { title: 'Document corrigé · Schéma d’un neurone', color: C_MOT, t0: .08 });
+    neuDoc(p, '../img/doc_schema_neurone.webp', 84, 206, 812, 350, { color: C_MOT, pad: 8, t0: .14 });
+
+    neuSpotlight(p, 95, 245, 360, 195, C_NT, m('cellule'), .4, { fillOpacity: .07 });
+    neuSpotlight(p, 95, 208, 390, 95, C_CENTRE, m('dendrite'), .4, { fillOpacity: .07 });
+    neuSpotlight(p, 445, 290, 425, 165, C_SENS, m('axone'), .4, { fillOpacity: .07 });
+
+    neuCard(p, 955, 146, 585, 430, { title: 'Les 3 caractéristiques d’une cellule', color: C_CENTRE, t0: m('cellule') });
+    neuText(p, '• Membrane plasmique : délimite le neurone.', 985, 246, m('cellule') + .15, { size: 21 });
+    neuText(p, '• Cytoplasme et noyau : logés dans le corps cellulaire.', 985, 292, m('cellule') + .3, { size: 21 });
+    neuText(p, '• Dendrites : reçoivent les signaux entrants.', 985, 356, m('dendrite'), { size: 21, fill: C_CENTRE });
+    neuText(p, '• Axone long : propage le message vers la terminaison.', 985, 404, m('axone'), { size: 21, fill: C_SENS });
+    neuPill(p, 1248, 505, 'Sens unique : Dendrites -> Soma -> Axone', C_NT, m('axone') + .25, { w: 515, size: 19 });
+
+    neuCard(p, 60, 594, 1480, 194, { title: 'Propagation unidirectionnelle du signal le long du neurone', color: C_NT, t0: m('dendrite') });
+    neuNeuron(p, 560, 718, { scale: .76, color: C_MOT, t0: m('dendrite'), pulseAt: m('axone') + .15, pulseColor: C_NT });
+    neuText(p, 'Trajet des messages nerveux ->', 1025, 724, m('axone') + .1, { size: 23, weight: 700, fill: C_NT });
+  }],
+
+  ['galvani', 'Galvani et le potentiel d’action', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Nature électrique du message : l’expérience de Galvani', 64, .05, 'Des travaux historiques (1737–1798) à l’enregistrement d’un potentiel d’action');
+
+    neuCard(p, 60, 148, 795, 585, { title: 'Document 2 · Expérience de Luigi Galvani', color: C_NT, t0: .08 });
+    neuDoc(p, '../img/doc_galvani.webp', 85, 208, 745, 495, { color: C_NT, pad: 8, t0: .14 });
+    neuSpotlight(p, 102, 345, 455, 325, C_NT, m('hist'), .4, { fillOpacity: .06 });
+
+    neuCard(p, 890, 148, 650, 585, { title: 'Preuve électrique : le potentiel d’action', color: C_CENTRE, t0: .14 });
+    neuText(p, 'En appliquant une décharge sur le nerf sciatique,', 920, 238, m('hist') + .15, { size: 21 });
+    neuText(p, 'Galvani observe la contraction immédiate du muscle.', 920, 272, m('hist') + .3, { size: 21 });
+    neuOscillo(p, 935, 322, 560, 250, { t0: m('pa'), mode: 'normal', label: 'Signal électrique bref : Potentiel d’action', color: C_NT });
+    neuPill(p, 1215, 645, 'Le message nerveux est de nature électrique', C_MOT, m('pa') + .5, { w: 560, size: 21 });
+  }],
+
+  ['q2', 'Vérifions le trajet et la nature', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Structure et signal électrique du neurone', 66, .05);
+    neuNeuron(p, 580, 245, { scale: .9, color: C_CENTRE, t0: .1, pulseAt: .3, pulseColor: C_NT });
+    neuOscillo(p, 975, 165, 390, 165, { t0: .2, mode: 'normal', label: 'Potentiel d’action', color: C_NT });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch2-q2',
+      prompt: ['Comment circule le message nerveux à l’intérieur d’un neurone, et sous quelle forme ?'],
+      build: choice([
+        'Sous forme de signal électrique (potentiel d’action), des dendrites vers le corps cellulaire puis l’axone',
+        'Sous forme de gouttelettes sanguines circulant de l’axone vers le noyau',
+        'Uniquement de façon chimique à l’intérieur du noyau cellulaire',
+      ], 0, 'Parfait ! C’est un potentiel d’action électrique propagé des dendrites jusqu’à l’extrémité de l’axone.', [
+        null,
+        'Non, le neurone ne transporte pas de sang : c’est l’expérience de Galvani qui prouve la nature électrique.',
+        'Non, la transmission le long du neurone lui-même est électrique ; le chimique intervient à la jonction.',
+      ]),
+    }], done),
+  }],
+
+  ['final1', 'Mise en pratique finale', () => {
+    panel(0);
+  }, {
+    ask: done => quiz(SCREEN, [
+      {
+        id: 'ch2-f1',
+        prompt: ['1 / 3 · Quels constituants montrent qu’un neurone est une véritable cellule ?'],
+        build: choice([
+          'Une membrane plasmique, un cytoplasme et un noyau',
+          'Uniquement une fibre sèche sans noyau ni membrane',
+          'Un cartilage entouré d’une coque minérale',
+        ], 0, 'Exact ! Comme toute cellule animale, le neurone possède membrane plasmique, cytoplasme et noyau.', [
+          null,
+          'Non, un neurone est une cellule vivante complète dont le noyau se situe dans le corps cellulaire.',
+          'Non, le cartilage constitue un tissu squelettique, pas un neurone.',
+        ]),
+      },
+      {
+        id: 'ch2-f2',
+        prompt: ['2 / 3 · Vrai ou Faux : coche la réponse exacte pour chaque affirmation.'],
+        build: grid([
+          { parts: ['La substance grise (cortex) se situe en périphérie du cerveau.'], ans: ['v'], why: 'Vrai : le cortex gris forme la couche externe des hémisphères cérébraux.' },
+          { parts: ['Luigi Galvani a prouvé que les nerfs sont entièrement isolés de toute électricité.'], ans: ['f'], why: 'Faux : son expérience sur la grenouille a au contraire démontré l’excitabilité électrique du nerf.' },
+          { parts: ['Un axone conduit le message nerveux depuis le corps cellulaire vers la terminaison.'], ans: ['v'], why: 'Vrai : l’axone assure le départ efférent du potentiel d’action.' },
+        ], [['v', 'Vrai', C_MOT], ['f', 'Faux', C_SENS]], { multi: false, text: true }),
+      },
+      {
+        id: 'ch2-f3',
+        prompt: ['3 / 3 · Quel nom porte le signal électrique élémentaire qui se propage le long d’un neurone ?'],
+        build: choice([
+          'Un potentiel d’action',
+          'Une hernie discale',
+          'Une aire visuelle V1',
+        ], 0, 'Bravo ! Le message nerveux circulant dans un neurone est un potentiel d’action électrique.', [
+          null,
+          'Non, une hernie discale est une compression vertébrale de la moelle épinière.',
+          'Non, V1 est une zone du cortex cérébral, pas le signal électrique lui-même.',
+        ]),
+      },
+    ], done, 'Mise en pratique · Chapitre 2'),
+  }],
+
+  ['finish', 'Terminé', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>

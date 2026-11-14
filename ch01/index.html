@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapitre 1 · Du stimulus au mouvement — Communication neuronale</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render">
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="../lib/lang-fr.js"></script>
+<script src="../lib/vocab.js"></script>
+<script src="audio/fr/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = {
+  number: 1,
+  title: 'Du stimulus au mouvement : organes sensoriels, centres nerveux et nerfs',
+  minutes: 6,
+  language: 'fr',
+  next: '../ch02/',
+};
+
+const BEATS = [
+  ['intro', 'Introduction', (m, D) => {
+    const g = G(scene, { o: 0, y: 18 });
+    T(g, 'SVT · Cycle 4 (4e) · Partie 1 · Chapitre 1', { x: 800, y: 190, size: 26, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Du stimulus au mouvement', { x: 800, y: 292, size: 74, weight: 700, fill: COL.chalk, anchor: 'middle' });
+    T(g, 'Organes sensoriels, centres nerveux et nerfs', { x: 800, y: 372, size: 44, weight: 600, fill: C_CENTRE, anchor: 'middle' });
+
+    neuSchemaNode(g, 260, 540, 230, 86, ['Organe', 'sensoriel'], { color: C_SENS, sub: 'stimulus' });
+    neuArrow(g, 390, 540, 620, 540, .2, { color: C_SENS, sw: 5 });
+    T(g, 'Message sensitif', { x: 505, y: 510, size: 20, weight: 700, fill: C_SENS, anchor: 'middle' });
+
+    neuSchemaNode(g, 800, 540, 320, 92, ['Centres nerveux', 'Cerveau + moelle'], { color: C_CENTRE, sub: 'intégration' });
+    neuArrow(g, 975, 540, 1195, 540, .4, { color: C_MOT, sw: 5 });
+    T(g, 'Message moteur', { x: 1085, y: 510, size: 20, weight: 700, fill: C_MOT, anchor: 'middle' });
+
+    neuSchemaNode(g, 1340, 540, 230, 86, 'Muscles', { color: C_MOT, sub: 'mouvement' });
+
+    tw(g, { o: 1, y: 0 }, .12, .75, out);
+    const sub = neuText(scene, 'Comment une stimulation est-elle perçue, analysée puis transformée en mouvement ?', 800, 738, m('sub'), { size: 28, fill: COL.dim, anchor: 'middle' });
+    tw(g, { o: 0, y: -18 }, D - .75, .65);
+    hide(sub, D - .75, .65);
+  }],
+
+  ['trajet', 'La boucle sensori-motrice', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Schéma bilan de la transmission nerveuse', 64, .05, 'Document officiel du cours : trajet du stimulus jusqu’aux muscles');
+
+    neuCard(p, 60, 144, 780, 615, { title: 'Schéma bilan · Relations entre organes', color: C_CENTRE, t0: .08 });
+    neuDoc(p, '../img/doc_trajet_nerveux.webp', 85, 204, 730, 535, { color: C_CENTRE, pad: 8, t0: .14 });
+
+    neuSpotlight(p, 520, 206, 265, 118, C_NT, m('stim'), .35, { fillOpacity: .08 });
+    neuSpotlight(p, 442, 265, 165, 125, C_SENS, m('sens'), .35, { fillOpacity: .08 });
+    neuSpotlight(p, 402, 330, 395, 255, C_CENTRE, m('centres'), .35, { fillOpacity: .06 });
+    neuSpotlight(p, 345, 588, 390, 142, C_MOT, m('mot'), .35, { fillOpacity: .08 });
+
+    const steps = [
+      ['1. Réception du stimulus', 'L’organe sensoriel (œil, peau, oreille...) capte le stimulus.', C_NT, m('stim')],
+      ['2. Message nerveux sensitif', 'Il voyage en rouge le long d’un nerf sensitif vers le cerveau.', C_SENS, m('sens')],
+      ['3. Centres nerveux', 'Le cerveau traite l’info ; la moelle épinière relaie la commande.', C_CENTRE, m('centres')],
+      ['4. Message nerveux moteur', 'Il descend en vert jusqu’aux muscles qui exécutent le mouvement.', C_MOT, m('mot')],
+    ];
+    steps.forEach(([ttl, desc, col, t0], i) => {
+      const y = 148 + i * 155;
+      neuCard(p, 880, y, 655, 134, { title: ttl, color: col, t0 });
+      neuText(p, desc, 910, y + 92, t0 + .16, { size: 20, fill: COL.chalk });
+    });
+  }],
+
+  ['grenouille', 'Expériences et aires cérébrales', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Nerfs conducteurs et aires visuelles cérébrales', 64, .05, 'Preuves expérimentales chez la grenouille et lésions chez l’Homme');
+
+    neuCard(p, 60, 148, 670, 580, { title: 'Expériences de sections nerveuses', color: C_SENS, t0: .08 });
+    const exps = [
+      ['Grenouille intacte', 'Elle saute face au danger', C_MOT],
+      ['Section du nerf optique', 'Elle ne saute pas', C_SENS],
+      ['Section de la moelle épinière', 'Elle ne saute pas', C_SENS],
+      ['Section du nerf sciatique', 'Elle ne saute pas', C_SENS],
+    ];
+    exps.forEach(([etat, res, col], i) => {
+      const ry = 225 + i * 96;
+      const g = G(p, { x: 85, y: ry, o: 0 });
+      mk('rect', { x: 0, y: 0, width: 620, height: 74, rx: 12, fill: mix('#0f1e2e', col, .12), stroke: col, 'stroke-width': 2 }, g);
+      T(g, etat, { x: 22, y: 31, size: 20, weight: 700, fill: COL.chalk });
+      T(g, res, { x: 22, y: 58, size: 19, weight: 600, fill: col });
+      show(g, m('optique') + i * .12, .35);
+    });
+    neuPill(p, 395, 658, 'Chaque conducteur nerveux est indispensable', C_NT, m('optique') + .55, { w: 580, size: 19 });
+
+    neuCard(p, 760, 148, 780, 580, { title: 'Aires visuelles V1 à V5 et lésions A / B', color: C_CENTRE, t0: .14 });
+    neuDoc(p, '../img/doc_vision_aires.webp', 785, 208, 730, 415, { color: C_CENTRE, pad: 8, t0: .2 });
+    neuSpotlight(p, 1140, 212, 370, 290, C_CENTRE, m('aires'), .4, { fillOpacity: .08 });
+    neuText(p, 'Les aires V1–V5 coopèrent pour analyser forme, couleur et mouvement.', 1150, 672, m('aires') + .2, { size: 19, fill: COL.dim, anchor: 'middle' });
+  }],
+
+  ['q1', 'Vérifions le trajet sensitif', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Du stimulus au cerveau : qui transporte l’information ?', 66, .05);
+    neuSchemaNode(p, 350, 240, 270, 92, ['Organe sensoriel', '(œil, peau...)'], { color: C_NT, t0: .1 });
+    neuArrow(p, 505, 240, 1085, 240, .25, { color: C_SENS, sw: 6 });
+    neuPill(p, 795, 200, 'Voie à identifier ?', C_SENS, .35, { w: 260, size: 20 });
+    neuSchemaNode(p, 1245, 240, 290, 92, ['Cerveau', 'Centres nerveux'], { color: C_CENTRE, t0: .15 });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch1-q1',
+      prompt: ['Par quoi l’information captée par un organe sensoriel rejoint-elle le cerveau ?'],
+      build: choice([
+        'Un message nerveux sensitif transporté par un nerf',
+        'Un message nerveux moteur envoyé par les muscles',
+        'La compression d’un disque entre deux vertèbres',
+      ], 0, 'Exact ! Le message nerveux sensitif circule de l’organe sensoriel vers le cerveau le long d’un nerf.', [
+        null,
+        'Non, le message moteur part des centres nerveux vers les muscles, pas vers le cerveau.',
+        'Non, une hernie discale est une lésion mécanique qui bloque la moelle épinière.',
+      ]),
+    }], done),
+  }],
+
+  ['hernie', 'Rôle de la moelle épinière', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'La moelle épinière : un relais vital (cas d’une hernie discale)', 64, .05, 'Document IRM du cours : comparaison entre colonne saine et compression médullaire');
+
+    neuDoc(p, '../img/doc_hernie_irm.webp', 270, 146, 1060, 495, { color: C_CENTRE, pad: 10, t0: .1 });
+    neuSpotlight(p, 282, 160, 415, 465, C_MOT, m('saine'), .4, { fillOpacity: .06 });
+    neuSpotlight(p, 895, 160, 420, 465, C_ALERT, m('hernie'), .4, { fillOpacity: .08 });
+
+    neuCard(p, 140, 666, 620, 118, { title: 'Coupe 1 : Moelle épinière intacte', color: C_MOT, t0: m('saine') });
+    neuText(p, 'Le canal est dégagé : les messages moteurs descendent librement.', 450, 748, m('saine') + .2, { size: 19, anchor: 'middle' });
+
+    neuCard(p, 840, 666, 620, 118, { title: 'Coupe 2 : Hernie discale', color: C_ALERT, t0: m('hernie') });
+    neuText(p, 'La hernie comprime la moelle épinière : troubles moteurs des membres.', 1150, 748, m('hernie') + .2, { size: 19, anchor: 'middle' });
+  }],
+
+  ['q2', 'À toi : sections et lésions', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Rupture des voies nerveuses', 66, .05);
+    neuSchemaNode(p, 270, 235, 220, 84, 'Œil (danger)', { color: C_NT, t0: .1 });
+    neuArrow(p, 395, 235, 620, 235, .2, { color: C_SENS, sw: 5 });
+    neuBlockBadge(p, 508, 235, C_ALERT, .3, 18);
+    neuSchemaNode(p, 760, 235, 250, 84, ['Cerveau +', 'moelle épinière'], { color: C_CENTRE, t0: .15 });
+    neuArrow(p, 900, 235, 1125, 235, .35, { color: C_MOT, sw: 5 });
+    neuSchemaNode(p, 1265, 235, 240, 84, ['Muscles', 'de la cuisse'], { color: C_MOT, t0: .2 });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch1-q2',
+      prompt: ['Pourquoi une grenouille dont le nerf optique est sectionné ne saute-t-elle pas face au danger ?'],
+      build: choice([
+        'Le message nerveux sensitif visuel n’atteint plus le cerveau',
+        'Les muscles de la cuisse n’ont plus de sang pour se contracter',
+        'La peau remplace aussitôt le nerf optique pour voir le danger',
+      ], 0, 'Bravo ! Sans nerf optique intact, l’information visuelle n’arrive jamais aux centres nerveux.', [
+        null,
+        'Non, le problème est la rupture de communication nerveuse, pas l’irrigation des muscles.',
+        'Non, un nerf optique coupé interrompt la voie sensitive de la vision.',
+      ]),
+    }], done),
+  }],
+
+  ['wrap', 'Bilan · Chapitre 1', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'À retenir — Chapitre 1', 70, .05, 'L’organisation générale de la commande nerveuse du mouvement');
+
+    const rows = [
+      ['1. Perception et voie sensitive', 'Un stimulus active un organe sensoriel ; un message nerveux sensitif remonte par un nerf.', C_SENS, m('w1')],
+      ['2. Traitement dans les centres nerveux', 'Le cerveau (et ses aires spécialisées V1–V5) analyse l’information ; la moelle épinière relaie la commande.', C_CENTRE, m('w2')],
+      ['3. Voie motrice et réponse', 'Un message nerveux moteur descend vers les muscles qui se contractent pour produire le mouvement.', C_MOT, m('w3')],
+    ];
+    rows.forEach(([ttl, desc, col, t0], i) => {
+      const y = 160 + i * 204;
+      neuCard(p, 120, y, 1360, 172, { title: ttl, color: col, t0 });
+      neuText(p, desc, 800, y + 114, t0 + .2, { size: 22, fill: COL.chalk, anchor: 'middle' });
+    });
+  }],
+
+  ['final1', 'Mise en pratique finale', () => {
+    panel(0);
+  }, {
+    ask: done => quiz(SCREEN, [
+      {
+        id: 'ch1-f1',
+        prompt: ['1 / 3 · Quels sont les deux organes regroupés sous le nom de « centres nerveux » ?'],
+        build: choice([
+          'Le cerveau et la moelle épinière',
+          'Le nerf optique et le nerf sciatique',
+          'Les organes sensoriels et les muscles',
+        ], 0, 'Exact ! Le cerveau et la moelle épinière constituent les centres nerveux.', [
+          null,
+          'Non, les nerfs assurent la liaison périphérique, ce ne sont pas des centres nerveux.',
+          'Non, les organes sensoriels reçoivent le stimulus et les muscles sont des effecteurs.',
+        ]),
+      },
+      {
+        id: 'ch1-f2',
+        prompt: ['2 / 3 · Vrai ou Faux : coche la réponse exacte pour chaque affirmation.'],
+        build: grid([
+          { parts: ['Plusieurs aires spécialisées du cortex cérébral (V1 à V5) participent à la vision.'], ans: ['v'], why: 'Vrai : des lésions différentes touchent sélectivement les couleurs ou les formes.' },
+          { parts: ['Un message nerveux moteur part du muscle pour rejoindre l’organe sensoriel.'], ans: ['f'], why: 'Faux : le message moteur part des centres nerveux et se dirige vers les muscles.' },
+          { parts: ['Une hernie discale comprimant la moelle épinière perturbe les mouvements des membres.'], ans: ['v'], why: 'Vrai : le passage des messages moteurs dans la moelle épinière est gêné.' },
+        ], [['v', 'Vrai', C_MOT], ['f', 'Faux', C_SENS]], { multi: false, text: true }),
+      },
+      {
+        id: 'ch1-f3',
+        prompt: ['3 / 3 · Dans quel ordre s’enchaînent les étapes permettant de réagir à un stimulus ?'],
+        build: choice([
+          'Organe sensoriel → message sensitif → centres nerveux → message moteur → muscle',
+          'Muscle → message sensitif → organe sensoriel → moelle épinière',
+          'Cerveau → stimulus → nerf optique → hernie discale',
+        ], 0, 'Parfait ! Tu maîtrises toute la chaîne de la transmission nerveuse.', [
+          null,
+          'Non, le stimulus agit d’abord sur l’organe sensoriel, puis le muscle répond en dernier.',
+          'Non, le stimulus vient de l’environnement et déclenche la boucle au niveau sensoriel.',
+        ]),
+      },
+    ], done, 'Mise en pratique · Chapitre 1'),
+  }],
+
+  ['finish', 'Terminé', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>

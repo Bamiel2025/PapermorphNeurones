@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapitre 3 · La synapse chimique — Communication neuronale</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render">
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="../lib/lang-fr.js"></script>
+<script src="../lib/vocab.js"></script>
+<script src="audio/fr/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = {
+  number: 3,
+  title: 'Franchir la synapse : vésicules et neurotransmetteurs chimiques',
+  minutes: 6,
+  language: 'fr',
+  next: '../ch04/',
+};
+
+const BEATS = [
+  ['intro', 'Introduction', (m, D) => {
+    const g = G(scene, { o: 0, y: 18 });
+    T(g, 'SVT · Cycle 4 (4e) · Partie 2 · Chapitre 3', { x: 800, y: 185, size: 26, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Franchir la synapse chimique', { x: 800, y: 285, size: 70, weight: 700, fill: COL.chalk, anchor: 'middle' });
+    T(g, 'Vésicules et neurotransmetteurs entre deux neurones', { x: 800, y: 360, size: 40, weight: 600, fill: C_NT, anchor: 'middle' });
+
+    neuSchemaNode(g, 330, 540, 270, 92, ['Neurone B', 'Message électrique'], { color: C_CENTRE });
+    neuArrow(g, 480, 540, 650, 540, .2, { color: C_NT, sw: 5 });
+    neuSchemaNode(g, 800, 540, 260, 96, ['Synapse', 'Fente + NT'], { kind: 'pill', color: C_NT, sub: 'relais chimique' });
+    neuArrow(g, 945, 540, 1115, 540, .4, { color: C_MOT, sw: 5 });
+    neuSchemaNode(g, 1270, 540, 270, 92, ['Neurone C', 'Nouveau message'], { color: C_MOT });
+
+    tw(g, { o: 1, y: 0 }, .12, .75, out);
+    const sub = neuText(scene, 'Comment un signal électrique traverse-t-il l’espace qui sépare deux neurones indépendants ?', 800, 742, m('sub'), { size: 27, fill: COL.dim, anchor: 'middle' });
+    tw(g, { o: 0, y: -18 }, D - .75, .65);
+    hide(sub, D - .75, .65);
+  }],
+
+  ['architecture', 'Architecture d’une synapse', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Les neurones ne se touchent pas : architecture de la synapse', 64, .05, 'Schéma du cours : éléments pré-synaptique, fente synaptique et élément post-synaptique');
+
+    neuCard(p, 70, 148, 700, 590, { title: 'Document · Architecture d’une synapse', color: C_CENTRE, t0: .08 });
+    neuDoc(p, '../img/doc_architecture_synapse.webp', 95, 208, 650, 505, { color: C_CENTRE, pad: 8, t0: .14 });
+
+    neuSpotlight(p, 110, 415, 255, 220, C_NT, m('pre'), .4, { fillOpacity: .07 });
+    neuSpotlight(p, 368, 390, 56, 200, C_SENS, m('fente'), .4, { fillOpacity: .12 });
+    neuSpotlight(p, 428, 390, 265, 240, C_MOT, m('post'), .4, { fillOpacity: .07 });
+
+    const items = [
+      ['1. Neurone pré-synaptique', 'L’axone en amont contient de petits sacs remplis de messagers :', 'les vésicules de neurotransmetteur.', C_NT, m('pre')],
+      ['2. La fente synaptique', 'Un espace microscopique vide sépare physiquement', 'les membranes des deux neurones.', C_SENS, m('fente')],
+      ['3. Neurone post-synaptique', 'Sa membrane porte des récepteurs qui capteront', 'les neurotransmetteurs pour relancer le message.', C_MOT, m('post')],
+    ];
+    items.forEach(([ttl, l1, l2, col, t0], i) => {
+      const y = 165 + i * 190;
+      neuCard(p, 815, y, 715, 162, { title: ttl, color: col, t0 });
+      neuText(p, l1, 845, y + 92, t0 + .16, { size: 20 });
+      neuText(p, l2, 845, y + 124, t0 + .22, { size: 20 });
+    });
+  }],
+
+  ['met', 'Observation au M.E.T. (x 10 000)', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Preuve microscopique de la libération chimique (M.E.T. x 10 000)', 64, .05, 'Document 1 : zone de jonction entre les neurones A / B et le neurone C (échelle : 100 nm)');
+
+    neuCard(p, 65, 142, 655, 652, { title: 'Document 1 · Microscope électronique à transmission', color: C_NT, t0: .08 });
+    neuDoc(p, '../img/doc1_met_synapse.webp', 88, 200, 608, 578, { color: C_NT, pad: 8, t0: .14 });
+
+    neuSpotlight(p, 102, 515, 268, 232, C_CENTRE, m('avant'), .4, { fillOpacity: .08 });
+    neuSpotlight(p, 378, 515, 298, 232, C_MOT, m('pendant'), .4, { fillOpacity: .08 });
+
+    neuCard(p, 760, 148, 775, 275, { title: 'Photo 1 · Avant la transmission du message', color: C_CENTRE, t0: m('avant') });
+    neuText(p, 'Les vésicules rondes restent groupées dans l’axone B.', 790, 245, m('avant') + .15, { size: 21 });
+    neuText(p, 'La membrane pré-synaptique reste lisse et fermée.', 790, 283, m('avant') + .3, { size: 21, fill: COL.dim });
+    neuPill(p, 1148, 360, 'Vésicules stockées · Échelle 100 nm · M.E.T. x 10 000', C_CENTRE, m('avant') + .45, { w: 615, size: 19 });
+
+    neuCard(p, 760, 462, 775, 295, { title: 'Photo 2 · Pendant la transmission du message', color: C_MOT, t0: m('pendant') });
+    neuText(p, 'Des vésicules migrent et fusionnent avec la membrane de B.', 790, 560, m('pendant') + .15, { size: 21 });
+    neuText(p, 'Elles libèrent leur contenu chimique dans la fente vers C.', 790, 598, m('pendant') + .3, { size: 21, fill: C_MOT });
+    neuPill(p, 1148, 688, 'Exocytose des vésicules -> passage du signal', C_MOT, m('pendant') + .45, { w: 615, size: 19 });
+  }],
+
+  ['q1', 'Vérifions le M.E.T.', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Que révèle la comparaison des photographies 1 et 2 ?', 66, .05);
+    neuSchemaNode(p, 420, 240, 320, 96, ['Photo 1 (avant)', 'Vésicules intactes'], { color: C_CENTRE, t0: .1 });
+    neuArrow(p, 600, 240, 980, 240, .25, { color: C_NT, sw: 5 });
+    neuSchemaNode(p, 1170, 240, 340, 96, ['Photo 2 (pendant)', 'Fusion à la membrane'], { color: C_MOT, t0: .15 });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch3-q1',
+      prompt: ['Au microscope électronique (M.E.T.), que font les vésicules du neurone B pendant la transmission ?'],
+      build: choice([
+        'Elles fusionnent avec la membrane et libèrent des messagers chimiques dans la fente synaptique',
+        'Elles disparaissent instantanément en détruisant le neurone C',
+        'Elles forment un fil de cuivre électrique reliant B et C',
+      ], 0, 'Bravo ! Les vésicules s’ouvrent sur la fente pour y libérer les neurotransmetteurs chimiques.', [
+        null,
+        'Non, le neurone C reste intact et reçoit le messager chimique.',
+        'Non, le relais entre B et C se fait par voie chimique à travers la fente, pas par un fil.',
+      ]),
+    }], done),
+  }],
+
+  ['anime', 'Animation · Les 4 étapes', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Mécanisme complet de la transmission synaptique', 64, .05, 'Du message électrique pré-synaptique au nouveau message post-synaptique');
+
+    neuSynapseStage(p, 470, 472, {
+      mode: 'normal',
+      t0: .08,
+      tMig: m('e2'),
+      tLib: m('e3'),
+      tFix: m('e4'),
+      scale: 1.05,
+    });
+
+    const steps = [
+      ['Étape 1 · Arrivée du message électrique', 'Un potentiel d’action arrive dans la terminaison de l’axone B.', C_SENS, m('e1')],
+      ['Étape 2 · Migration des vésicules', 'Les vésicules chargées de neurotransmetteurs descendent vers la membrane.', C_CENTRE, m('e2')],
+      ['Étape 3 · Libération chimique', 'Les neurotransmetteurs sont déversés dans la fente synaptique.', C_NT, m('e3')],
+      ['Étape 4 · Fixation et relance sur C', 'Fixés sur la membrane du neurone C, ils déclenchent un nouveau message électrique.', C_MOT, m('e4')],
+    ];
+    steps.forEach(([ttl, desc, col, t0], i) => {
+      const y = 152 + i * 158;
+      neuCard(p, 745, y, 795, 136, { title: ttl, color: col, t0 });
+      neuText(p, desc, 775, y + 92, t0 + .15, { size: 19 });
+    });
+  }],
+
+  ['bilan_doc', 'Schéma bilan officiel', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Schéma bilan du cours : la communication entre les neurones', 64, .05, 'Comparaison Avant / Lors de la transmission du message nerveux');
+
+    neuDoc(p, '../img/schema_bilan_synapse.webp', 275, 144, 1050, 602, { color: C_CENTRE, pad: 10, t0: .1 });
+    neuSpotlight(p, 290, 198, 490, 538, C_CENTRE, m('avant_bilan'), .4, { fillOpacity: .05 });
+    neuSpotlight(p, 795, 198, 515, 538, C_MOT, m('lors_bilan'), .4, { fillOpacity: .06 });
+  }],
+
+  ['q2', 'À toi : codage du signal', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Conversion électrique ↔ chimique au niveau de la synapse', 66, .05);
+    neuSchemaNode(p, 310, 240, 270, 90, ['Neurone B', 'Message électrique'], { color: C_CENTRE, t0: .1 });
+    neuArrow(p, 460, 240, 620, 240, .2, { color: C_NT, sw: 5 });
+    neuSchemaNode(p, 780, 240, 280, 90, ['Fente synaptique', 'Neurotransmetteurs'], { kind: 'pill', color: C_NT, t0: .2 });
+    neuArrow(p, 935, 240, 1095, 240, .35, { color: C_MOT, sw: 5 });
+    neuSchemaNode(p, 1270, 240, 300, 90, ['Neurone C', 'Nouveau message ?'], { color: C_MOT, t0: .25 });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch3-q2',
+      prompt: ['Comment s’effectue le passage d’un message nerveux du neurone B au neurone C ?'],
+      build: choice([
+        'Message électrique (B) -> messager chimique dans la fente -> nouveau message électrique (C)',
+        'Message chimique (B) -> rayon lumineux -> destruction des vésicules',
+        'Passage direct du noyau de B à travers la fente jusqu’à C',
+      ], 0, 'Exact ! La synapse convertit un signal électrique en signal chimique, qui recrée un signal électrique dans C.', [
+        null,
+        'Non, le neurone B conduit un signal électrique et libère un neurotransmetteur chimique.',
+        'Non, le noyau reste toujours dans le corps cellulaire.',
+      ]),
+    }], done),
+  }],
+
+  ['final1', 'Mise en pratique finale', () => {
+    panel(0);
+  }, {
+    ask: done => quiz(SCREEN, [
+      {
+        id: 'ch3-f1',
+        prompt: ['1 / 3 · Comment appelle-t-on les substances chimiques libérées par les vésicules dans la fente synaptique ?'],
+        build: choice([
+          'Les neurotransmetteurs',
+          'Les vertèbres lombaires',
+          'Les dendrites optiques',
+        ], 0, 'Parfait ! Ce sont les neurotransmetteurs qui assurent la transmission chimique synaptique.', [
+          null,
+          'Non, les vertèbres protègent la moelle épinière.',
+          'Non, les dendrites sont des prolongements récepteurs du corps cellulaire.',
+        ]),
+      },
+      {
+        id: 'ch3-f2',
+        prompt: ['2 / 3 · Vrai ou Faux : coche la réponse exacte pour chaque affirmation.'],
+        build: grid([
+          { parts: ['Les deux neurones B et C sont directement soudés sans aucun espace entre eux.'], ans: ['f'], why: 'Faux : ils sont séparés par la fente synaptique.' },
+          { parts: ['Avant la transmission, les neurotransmetteurs sont stockés dans des vésicules.'], ans: ['v'], why: 'Vrai : le M.E.T. montre de nombreuses vésicules accumulées dans B.' },
+          { parts: ['La fixation des neurotransmetteurs sur le neurone C déclenche un message nerveux électrique.'], ans: ['v'], why: 'Vrai : l’information reprend ensuite sous forme électrique dans C.' },
+        ], [['v', 'Vrai', C_MOT], ['f', 'Faux', C_SENS]], { multi: false, text: true }),
+      },
+      {
+        id: 'ch3-f3',
+        prompt: ['3 / 3 · Relève sur le Document 1 (M.E.T.) les deux données d’observation (nombres sans espace) :'],
+        build: blanks([
+          {
+            parts: ['Le cliché est pris au microscope électronique à transmission x ', { box: '10000' }, ' avec une barre d’échelle de ', { box: '100' }, ' nm.'],
+            why: 'Parfait ! Document 1 indique bien : M.E.T. x 10 000 et barre d’échelle 100 nm.',
+            hint: 'Lis sous le haut droit du cliché (10000 sans espace) puis l’échelle noire en haut à gauche de la photo 1 (en nm).',
+          },
+        ]),
+      },
+    ], done, 'Mise en pratique · Chapitre 3'),
+  }],
+
+  ['finish', 'Terminé', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>

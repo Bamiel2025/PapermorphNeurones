@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La communication neuronale et l'action des drogues</title>
+<meta name="description" content="Du stimulus au neurone, puis de la synapse chimique au mode d'action des drogues et de l'alcool — livre animé SVT Cycle 4 (4e).">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f1e2e'/%3E%3Ccircle cx='22' cy='32' r='11' fill='none' stroke='%2338bdf8' stroke-width='3.5'/%3E%3Cpath d='M33 32H47' stroke='%23fbbf24' stroke-width='3.5' stroke-linecap='round'/%3E%3Ccircle cx='50' cy='32' r='6' fill='%2334d399'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="lib/units.css">
+<link rel="stylesheet" href="lib/contents.css">
+<script src="lib/units.js"></script>
+<script src="lib/contents.js"></script>
+<script src="lib/lang-fr.js"></script>
+<script src="unit-art.js"></script>
+<link rel="expect" href="#ch01" blocking="render">
+<style>
+html:root {
+  --page: #0a1522;
+  --board: #0f1e2e;
+  --panel: #14273b;
+  --edge: #2c4c6b;
+  --chalk: #f4f8fc;
+  --dim: #a8c4da;
+  --faint: #587692;
+  --task: #38bdf8;
+  --quiz: #fbbf24;
+  --good: #34d399;
+  --top-bg: rgba(15, 30, 46, .88);
+  --top-line: #213e59;
+  color-scheme: dark;
+}
+</style>
+</head>
+<body>
+<section id="cover">
+  <div class="chalk" aria-hidden="true">
+    <span style="left:6%;top:13%;--d:1.6">STIMULUS · NERFS · CENTRES NERVEUX</span>
+    <span style="right:7%;top:16%;--d:1.9">NEURONES · POTENTIEL D'ACTION</span>
+    <span style="left:5%;bottom:20%;--d:2.2">SYNAPSE · NEUROTRANSMETTEURS</span>
+    <span style="right:6%;bottom:15%;--d:2.5">DROGUES · ALCOOL · ALTÉRATION</span>
+  </div>
+  <svg class="mascot draw" id="guide" width="210" height="147"></svg>
+  <p class="kicker">SVT · Cycle 4 (4e) · Livre animé</p>
+  <h1>La communication <i>neuronale</i> et les drogues</h1>
+  <p class="lede">Des organes sensoriels et de la moelle épinière jusqu’au neurone électrique de Galvani, à la synapse au microscope électronique et à l’action des drogues.</p>
+  <div class="acts">
+    <a class="btn go" href="#contents" data-t="open">Ouvrir le livre<svg viewBox="0 0 16 16"><path d="M6 2.5 11.5 8 6 13.5 4.6 12.1 8.7 8 4.6 3.9z"/></svg></a>
+    <a class="btn quiet" id="resume" hidden></a>
+  </div>
+  <p class="meta" id="meta"></p>
+</section>
+
+<main id="contents">
+  <header class="top">
+    <a class="home" href="#book" aria-label="Retour à la couverture" data-t-label="toCover"><svg class="mascot" id="guideSmall" width="52" height="36"></svg><strong>La communication <i>neuronale</i></strong></a>
+    <span class="prog" id="prog"></span>
+  </header>
+  <div id="units"></div>
+</main>
+
+<script>
+Contents.book({
+  start: { unit: 1, chapter: 1 },
+  units: [
+    ['Du stimulus au neurone : organisation nerveuse et message électrique', [
+      ['Du stimulus au mouvement : organes sensoriels, centres nerveux et nerfs', 6],
+      ['Les neurones : des cellules spécialisées dans la communication électrique', 6],
+    ]],
+    ['La synapse chimique et la perturbation par les drogues et l’alcool', [
+      ['Franchir la synapse : vésicules et neurotransmetteurs chimiques', 6],
+      ['Mode d’action des drogues et de l’alcool sur la synapse et schéma bilan', 6],
+    ]],
+  ],
+  hues: ['#38bdf8', '#c084fc'],
+  ink: '#f4f8fc',
+});
+frContentsLabels();
+</script>
+</body>
+</html>

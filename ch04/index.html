@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chapitre 4 · Action des drogues et de l’alcool — Communication neuronale</title>
+<link rel="stylesheet" href="../lib/engine.css">
+<link rel="expect" href="#bar" blocking="render">
+</head>
+<body>
+<script src="../lib/engine.js"></script>
+<script src="../lib/lang-fr.js"></script>
+<script src="../lib/vocab.js"></script>
+<script src="audio/fr/timings.js"></script>
+<script>
+'use strict';
+const CHAPTER = {
+  number: 4,
+  title: 'Mode d’action des drogues et de l’alcool sur la synapse et schéma bilan',
+  minutes: 6,
+  language: 'fr',
+  next: '../#contents',
+};
+
+const BEATS = [
+  ['intro', 'Introduction', (m, D) => {
+    const g = G(scene, { o: 0, y: 18 });
+    T(g, 'SVT · Cycle 4 (4e) · Partie 2 · Chapitre 4', { x: 800, y: 185, size: 26, fill: COL.dim, anchor: 'middle' });
+    T(g, 'Drogues, alcool et synapses', { x: 800, y: 285, size: 72, weight: 700, fill: COL.chalk, anchor: 'middle' });
+    T(g, 'Perturbations de la transmission et risques pour l’organisme', { x: 800, y: 362, size: 40, weight: 600, fill: C_DRUG, anchor: 'middle' });
+
+    neuSchemaNode(g, 330, 540, 270, 92, ['Drogues et alcool', 'Cannabis, alcool...'], { color: C_DRUG });
+    neuArrow(g, 480, 540, 650, 540, .2, { color: C_DRUG, sw: 5 });
+    neuSchemaNode(g, 800, 540, 270, 96, ['Fente synaptique', 'Fixation / blocage'], { kind: 'pill', color: C_ALERT, sub: 'cible précise' });
+    neuArrow(g, 950, 540, 1120, 540, .4, { color: C_ALERT, sw: 5 });
+    neuSchemaNode(g, 1280, 540, 290, 92, ['Altération', 'du message nerveux'], { color: C_ALERT });
+
+    tw(g, { o: 1, y: 0 }, .12, .75, out);
+    const sub = neuText(scene, 'Où ces substances agissent-elles dans le cerveau et comment perturbent-elles la communication ?', 800, 742, m('sub'), { size: 27, fill: COL.dim, anchor: 'middle' });
+    tw(g, { o: 0, y: -18 }, D - .75, .65);
+    hide(sub, D - .75, .65);
+  }],
+
+  ['atelier', 'Atelier 1 · Cannabis et héroïne', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Effets nerveux et lieu d’action (Atelier 1 : cannabis et héroïne)', 64, .05, 'Document d’activité du cours : conséquences comportementales et localisation synaptique');
+
+    neuDoc(p, '../img/doc_atelier_drogues.webp', 180, 144, 1240, 530, { color: C_DRUG, pad: 10, t0: .1 });
+    neuSpotlight(p, 195, 200, 665, 455, C_ALERT, m('effets'), .4, { fillOpacity: .06 });
+    neuSpotlight(p, 870, 200, 535, 455, C_DRUG, m('lieu'), .4, { fillOpacity: .07 });
+
+    neuCard(p, 180, 694, 605, 102, { title: 'Troubles ressentis par l’usager', color: C_ALERT, t0: m('effets') });
+    neuText(p, 'Attention, mémoire, apprentissage, hallucinations, dépendance psychique.', 482, 772, m('effets') + .2, { size: 17, anchor: 'middle' });
+
+    neuCard(p, 815, 694, 605, 102, { title: 'Lieu d’action précis : la synapse', color: C_DRUG, t0: m('lieu') });
+    neuText(p, 'S’insinuent dans la fente et se fixent sur la membrane des neurones A ou B.', 1118, 772, m('lieu') + .2, { size: 17, anchor: 'middle' });
+  }],
+
+  ['tableau', 'Document 2 · Les 4 modes d’action', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Document 2 : Modes d’action des drogues et de l’alcool', 64, .05, 'Comparaison des quatre mécanismes synaptiques étudiés en 4e');
+
+    neuDoc(p, '../img/doc2_tableau_drogues.webp', 175, 142, 1250, 465, { color: C_NT, pad: 10, t0: .1 });
+    neuSpotlight(p, 188, 280, 1220, 81, C_DRUG, m('cannabis'), .4, { fillOpacity: .08 });
+    neuSpotlight(p, 188, 365, 1220, 80, C_NT, m('cocaine'), .4, { fillOpacity: .08 });
+    neuSpotlight(p, 188, 449, 1220, 46, C_ALERT, m('alcool'), .4, { fillOpacity: .08 });
+    neuSpotlight(p, 188, 499, 1220, 80, C_CENTRE, m('amph'), .4, { fillOpacity: .08 });
+
+    const cards = [
+      ['Cannabis · Héroïne', 'Empêchent la libération des vésicules.', C_DRUG, m('cannabis')],
+      ['Cocaïne · Ecstasy', 'Maintiennent les NT dans la fente.', C_NT, m('cocaine')],
+      ['Alcool', 'Empêche les NT d’agir sur C.', C_ALERT, m('alcool')],
+      ['Amphétamines', 'Vident les vésicules dans la fente.', C_CENTRE, m('amph')],
+    ];
+    cards.forEach(([ttl, desc, col, t0], i) => {
+      const x = 105 + i * 355;
+      neuCard(p, x, 634, 330, 142, { title: ttl, color: col, t0 });
+      neuText(p, desc, x + 165, 725, t0 + .15, { size: 18, anchor: 'middle' });
+    });
+  }],
+
+  ['q1', 'Vérifions le lieu d’action', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'À quel endroit les drogues agissent-elles en priorité ?', 66, .05);
+    neuSchemaNode(p, 350, 240, 260, 90, ['Neurone A ou B', 'Axone terminal'], { color: C_CENTRE, t0: .1 });
+    neuArrow(p, 495, 240, 650, 240, .2, { color: C_DRUG, sw: 5 });
+    neuSchemaNode(p, 800, 240, 270, 96, ['Synapse', 'Fente + membranes'], { kind: 'pill', color: C_DRUG, t0: .2 });
+    neuArrow(p, 950, 240, 1105, 240, .35, { color: C_MOT, sw: 5 });
+    neuSchemaNode(p, 1255, 240, 270, 90, ['Neurone C', 'Corps cellulaire'], { color: C_MOT, t0: .25 });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch4-q1',
+      prompt: ['Où s’insinuent les drogues et l’alcool pour perturber la communication neuronale ?'],
+      build: choice([
+        'Dans la fente synaptique, en se fixant sur les membranes des neurones pré- ou post-synaptiques',
+        'Dans les disques entre deux vertèbres pour provoquer une hernie discale',
+        'Uniquement sur les muscles de la cuisse sans jamais toucher le cerveau',
+      ], 0, 'Exact ! Les drogues agissent directement au niveau des synapses entre neurones.', [
+        null,
+        'Non, une hernie discale est une déformation d’un disque vertébral, pas le mode d’action des drogues.',
+        'Non, c’est la transmission synaptique dans le système nerveux central qui est ciblée.',
+      ]),
+    }], done),
+  }],
+
+  ['perturbation', 'Synapse normale vs perturbée', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Effets comparés sur la transmission synaptique', 64, .05, 'État normal vs blocage de la libération (cannabis) et blocage post-synaptique (alcool)');
+
+    neuCard(p, 70, 146, 460, 548, { title: '1 · Synapse normale', color: C_MOT, t0: m('normal') });
+    neuSynapseStage(p, 300, 434, {
+      mode: 'normal', labels: false, scale: .82,
+      t0: m('normal'), tMig: m('normal') + .4, tLib: m('normal') + 1.0, tFix: m('normal') + 1.6,
+    });
+
+    neuCard(p, 570, 146, 460, 548, { title: '2 · Cannabis / Héroïne', color: C_DRUG, t0: m('bloc_lib') });
+    neuSynapseStage(p, 800, 434, {
+      mode: 'cannabis', labels: false, scale: .82,
+      t0: m('bloc_lib'), tMig: m('bloc_lib') + .4, tLib: m('bloc_lib') + 1.0, tFix: m('bloc_lib') + 1.6,
+    });
+
+    neuCard(p, 1070, 146, 460, 548, { title: '3 · Alcool', color: C_ALERT, t0: m('bloc_rec') });
+    neuSynapseStage(p, 1300, 434, {
+      mode: 'alcool', labels: false, scale: .82,
+      t0: m('bloc_rec'), tMig: m('bloc_rec') + .4, tLib: m('bloc_rec') + 1.0, tFix: m('bloc_rec') + 1.6,
+    });
+
+    neuOscillo(p, 570, 708, 960, 88, { t0: m('bloc_rec') + .4, mode: 'altered', label: 'Message post-synaptique altéré dans le neurone C', color: C_ALERT });
+  }],
+
+  ['bilan_drogues', 'Schéma bilan et prévention', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Schéma bilan : action des drogues sur le message nerveux', 64, .05, 'Document officiel de correction : double point d’impact et altération du signal');
+
+    neuCard(p, 65, 142, 710, 635, { title: 'Schéma bilan du cours (page 2)', color: C_DRUG, t0: .08 });
+    neuDoc(p, '../img/schema_action_drogues.webp', 88, 200, 664, 558, { color: C_DRUG, pad: 8, t0: .14 });
+
+    neuSpotlight(p, 448, 526, 294, 70, C_DRUG, m('ref_lib'), .4, { fillOpacity: .09 });
+    neuSpotlight(p, 448, 600, 294, 68, C_NT, m('ref_fix'), .4, { fillOpacity: .09 });
+    neuSpotlight(p, 430, 682, 298, 52, C_ALERT, m('ref_alt'), .4, { fillOpacity: .09 });
+
+    const pts = [
+      ['1. Empêcher la libération des NT', 'Cannabis et héroïne bloquent la vidange des vésicules', 'du neurone pré-synaptique.', C_DRUG, m('ref_lib')],
+      ['2. Bloquer la fixation ou dérégler la fente', 'Alcool (bloque l’action sur C) ou cocaïne / amphétamines', '(maintiennent ou vident les neurotransmetteurs).', C_NT, m('ref_fix')],
+      ['3. Altération et santé publique', 'Réflexes ralentis, troubles de mémoire, accidents de la route', 'et dépendance psychique.', C_ALERT, m('ref_alt')],
+    ];
+    pts.forEach(([ttl, l1, l2, col, t0], i) => {
+      const y = 165 + i * 200;
+      neuCard(p, 815, y, 720, 168, { title: ttl, color: col, t0 });
+      neuText(p, l1, 845, y + 96, t0 + .16, { size: 20 });
+      neuText(p, l2, 845, y + 128, t0 + .22, { size: 20 });
+    });
+  }],
+
+  ['q2', 'À toi : comparer les drogues', (m) => {
+    const p = panel(0);
+    neuTitle(p, 'Deux modes de blocage différents sur la même synapse', 66, .05);
+    neuSchemaNode(p, 420, 240, 360, 96, ['Cannabis / héroïne', 'Membrane pré-synaptique B'], { color: C_DRUG, t0: .1 });
+    neuSchemaNode(p, 1180, 240, 360, 96, ['Alcool', 'Action bloquée sur C'], { color: C_ALERT, t0: .2 });
+  }, {
+    ask: done => quiz(BAND, [{
+      id: 'ch4-q2',
+      prompt: ['Quelle substance empêche les neurotransmetteurs déjà libérés d’agir sur la membrane du neurone C ?'],
+      build: choice([
+        'L’alcool',
+        'L’ampoule de verre de Galvani',
+        'La moelle épinière saine',
+      ], 0, 'Bravo ! D’après le Document 2, l’alcool empêche le neurotransmetteur d’agir sur la membrane de C, alors que cannabis et héroïne empêchent sa libération.', [
+        null,
+        'Non, il s’agit du mode d’action spécifique de l’alcool étudié au Document 2.',
+        'Non, la moelle épinière est un centre nerveux qui relaie les messages.',
+      ]),
+    }], done),
+  }],
+
+  ['final1', 'Mise en pratique finale', () => {
+    panel(0);
+  }, {
+    ask: done => quiz(SCREEN, [
+      {
+        id: 'ch4-f1',
+        prompt: ['1 / 3 · D’après le Document 2, comment les amphétamines modifient-elles les vésicules du neurone A ou B ?'],
+        build: choice([
+          'Elles pénètrent dans les vésicules, qui se vident et s’accumulent dans la fente synaptique',
+          'Elles créent de nouvelles vertèbres autour du cerveau',
+          'Elles transforment les muscles en organes sensoriels',
+        ], 0, 'Exact ! Les amphétamines vident les vésicules, provoquant une accumulation de substance dans la fente.', [
+          null,
+          'Non, lis bien la dernière ligne du Document 2 sur les amphétamines.',
+          'Non, les drogues perturbent les synapses entre neurones.',
+        ]),
+      },
+      {
+        id: 'ch4-f2',
+        prompt: ['2 / 3 · Vrai ou Faux : coche la réponse exacte pour chaque affirmation.'],
+        build: grid([
+          { parts: ['Le cannabis provoque des troubles de l’attention, de la mémorisation et donc de l’apprentissage.'], ans: ['v'], why: 'Vrai : ces effets comportementaux figurent dans l’Atelier 1.' },
+          { parts: ['La cocaïne et l’ecstasy maintiennent les neurotransmetteurs dans l’espace synaptique.'], ans: ['v'], why: 'Vrai : le Document 2 indique ce mécanisme de maintien dans la fente.' },
+          { parts: ['Une synapse perturbée transmet exactement le même message nerveux intact vers le neurone C.'], ans: ['f'], why: 'Faux : toutes ces substances entraînent une altération du message nerveux.' },
+        ], [['v', 'Vrai', C_MOT], ['f', 'Faux', C_SENS]], { multi: false, text: true }),
+      },
+      {
+        id: 'ch4-f3',
+        prompt: ['3 / 3 · Quelle conséquence commune résulte de l’action des drogues sur les synapses ?'],
+        build: choice([
+          'L’altération du message nerveux, des troubles comportementaux et un risque de dépendance psychique',
+          'Une amélioration durable de l’attention et de la mémoire scolaire',
+          'La disparition complète du cortex cérébral en quelques secondes',
+        ], 0, 'Parfait ! Tu as maîtrisé les quatre chapitres sur la communication neuronale et les drogues.', [
+          null,
+          'Non, l’Atelier 1 montre au contraire des troubles de l’attention et de la mémorisation.',
+          'Non, les drogues perturbent le fonctionnement synaptique sans dissoudre anatomiquement le cortex.',
+        ]),
+      },
+    ], done, 'Mise en pratique · Chapitre 4'),
+  }],
+
+  ['finish', 'Terminé', () => { panel(0); }, { ask: finishCard }],
+].map(([id, title, run, extra]) => ({ id, title, run, ...extra }));
+
+boot();
+</script>
+</body>
+</html>
